@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use("/api/v1", routes);
 
 // Gestion des routes inexistantes
-app.all("*", (req, res, next) => {
+app.use((req, res, next) => {
   next(ApiError.notFound(`Route ${req.originalUrl} introuvable`));
 });
 
