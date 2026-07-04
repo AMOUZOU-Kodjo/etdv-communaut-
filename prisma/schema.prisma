@@ -1,0 +1,595 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Rôles des utilisateurs dans la plateforme (controle d'acces)
+enum Role {
+  ADMIN
+  PASTEUR
+  APOTRE
+  FIDELES
+  VISITEUR
+}
+
+// Fonctions ministeres specifiques dans l'eglise
+enum Ministry {
+  PASTEUR_TITULAIRE
+  PASTEUR_ADJOINT
+  APOTRE
+  DIACRE
+  DIACONESSE
+  MAMAN_PASTEUR
+  EVANGELISTE
+  ENSEIGNANT
+  RESPONSABLE_JEUNESSE
+  RESPONSABLE_ADORATION
+  AUCUN
+}
+
+// Genre de l'utilisateur
+enum Gender {
+  HOMME
+  FEMME
+}
+
+// Situation matrimoniale
+enum MaritalStatus {
+  CELIBATAIRE
+  MARIE
+  DIVORCE
+  VEUF
+}
+
+// Eglises locales
+model Church {
+  id           String   @id @default(uuid())
+  name         String
+  address      String?
+  city         String?
+  country      String?
+  phone        String?
+  email        String?
+  website      String?
+  logoUrl      String?
+  description  String?
+  latitude     Float?
+  longitude    Float?
+  serviceHours String?
+  socialMedia  String?  // JSON: {facebook, youtube, instagram, tiktok}
+  isActive     Boolean  @default(true)
+
+  members   User[]
+  events    Event[]
+  donations Donation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("churches")
+}
+
+// Table principale des utilisateurs (membres de la communaute)
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  firstName    String
+  lastName     String
+  phone        String?
+  role         Role     @default(VISITEUR)
+  isActive     Boolean  @default(true)
+  refreshToken String?
+  churchId     String?
+  church       Church?  @relation(fields: [churchId], references: [id])
+
+  profile            Profile?
+  posts              Post[]
+  events             Event[]
+  sermons            Sermon[]
+  prayers            PrayerRequest[]
+  donations          Donation[]
+  eventRegistrations EventRegistration[]
+  validatedRegistrations EventRegistration[] @relation("ValidatedBy")
+  media              Media[]
+  programs           Program[]
+  notifications      Notification[]
+  sentNotifications  Notification[]    @relation("SentNotifications")
+  chatParticipants   ChatRoomParticipant[]
+  chatMessages       ChatMessage[]
+  morningPrayers     MorningPrayer[]
+  profileVisits      ProfileVisit[]     @relation("ProfileVisits")
+  visitorVisits      ProfileVisit[]     @relation("VisitorVisits")
+  postReads          PostRead[]
+  liveStreams        LiveStream[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// Profil detaille de l'utilisateur (informations supplementaires)
+model Profile {
+  id            String        @id @default(uuid())
+  userId        String        @unique
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio           String?
+  address       String?
+  dateOfBirth   DateTime?
+  gender        Gender?
+  maritalStatus MaritalStatus?
+  ministry      Ministry      @default(AUCUN)
+  baptismDate   DateTime?
+  avatarUrl     String?
+  profession    String?
+  city          String?
+  country       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("profiles")
+}
+
+// Categories pour les actualites et annonces
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  type        String   @default("NEWS")
+  isActive    Boolean  @default(true)
+  posts       Post[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
+
+// Actualites et annonces publiees par les responsables
+model Post {
+  id          String    @id @default(uuid())
+  title       String
+  content     String
+  excerpt     String?
+  imageUrl    String?
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id])
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+
+  reads    PostRead[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("posts")
+}
+
+// Evenements (cultes, conferences, reunions)
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  date        DateTime
+  startTime   String?
+  endTime     String?
+  location    String?
+  address     String?
+  imageUrl    String?
+  maxCapacity Int?
+  type        String   @default("CULTE")
+  isPublic    Boolean  @default(true)
+  status      String   @default("PLANIFIE")
+  organizerId String
+  organizer   User     @relation(fields: [organizerId], references: [id])
+  churchId    String?
+  church      Church?  @relation(fields: [churchId], references: [id])
+
+  registrations EventRegistration[]
+  donations     Donation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("events")
+}
+
+// Sermons et predications (audio, video, texte)
+model Sermon {
+  id           String    @id @default(uuid())
+  title        String
+  preacher     String
+  bibleVerse   String?
+  description  String?
+  content      String?
+  audioUrl     String?
+  videoUrl     String?
+  imageUrl     String?
+  datePreached DateTime?
+  authorId     String
+  author       User      @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sermons")
+}
+
+// Type de diffusion (YOUTUBE = embarquee depuis YouTube, INTERNE = depuis le site)
+enum StreamType {
+  YOUTUBE
+  INTERNE
+}
+
+// Statut d'une diffusion en direct
+enum StreamStatus {
+  PLANIFIE
+  EN_DIRECT
+  TERMINE
+}
+
+// Diffusions en direct depuis YouTube ou en interne
+model LiveStream {
+  id           String       @id @default(uuid())
+  title        String
+  description  String?
+  type         StreamType
+  status       StreamStatus @default(PLANIFIE)
+  thumbnailUrl String?
+  // Pour les diffusions YouTube
+  youtubeVideoId String?
+  youtubeChannelId String?
+  embedUrl      String?
+  // Pour les diffusions internes
+  streamUrl     String?
+  // Lien du direct sur le site
+  viewerUrl     String?
+  scheduledAt   DateTime?
+  startedAt     DateTime?
+  endedAt       DateTime?
+  isActive      Boolean      @default(true)
+  authorId      String
+  author        User         @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@map("live_streams")
+}
+
+// Intentions de priere soumises par les membres
+model PrayerRequest {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  isAnonymous Boolean  @default(false)
+  isAnswered  Boolean  @default(false)
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("prayer_requests")
+}
+
+// Dons et offrandes (communautaires, par eglise, ou pour un evenement)
+model Donation {
+  id            String        @id @default(uuid())
+  amount        Float
+  currency      String        @default("XAF")
+  type          String        @default("OFFRANDE")
+  description   String?
+  paymentMethod PaymentMethod?
+  phone         String?
+  transactionId String?
+  status        String        @default("EN_ATTENTE")
+  donorId       String
+  donor         User          @relation(fields: [donorId], references: [id])
+  churchId      String?
+  church        Church?       @relation(fields: [churchId], references: [id])
+  eventId       String?
+  event         Event?        @relation(fields: [eventId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([donorId])
+  @@index([churchId])
+  @@index([eventId])
+  @@map("donations")
+}
+
+// Inscriptions aux evenements avec validation
+model EventRegistration {
+  id            String   @id @default(uuid())
+  eventId       String
+  event         Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status        String   @default("EN_ATTENTE")
+  receiptNumber String?
+  validatedAt   DateTime?
+  validatedById String?
+  validatedBy   User?    @relation("ValidatedBy", fields: [validatedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([eventId, userId])
+  @@map("event_registrations")
+}
+
+// Galerie multimedia (photos, audios, videos)
+enum MediaType {
+  PHOTO
+  AUDIO
+  VIDEO
+}
+
+// Type de message dans les conversations
+enum MessageType {
+  TEXTE
+  AUDIO
+  IMAGE
+  VIDEO
+  LIEN
+}
+
+// Methode de paiement pour les dons
+enum PaymentMethod {
+  FLOOZ
+  TMONEY
+  PAYPAL
+  CARTE
+}
+
+model Media {
+  id           String    @id @default(uuid())
+  title        String
+  description  String?
+  type         MediaType
+  url          String
+  thumbnailUrl String?
+  fileSize     Int?
+  duration     String?
+  mimeType     String?
+  isPublished  Boolean   @default(false)
+  isApproved   Boolean   @default(false)
+  approvedBy   String?
+  approvedAt   DateTime?
+  isHidden     Boolean   @default(false)
+  hiddenAt     DateTime?
+  authorId     String
+  author       User      @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("media")
+}
+
+// Conversations privees entre utilisateurs
+model ChatRoom {
+  id           String               @id @default(uuid())
+  participants ChatRoomParticipant[]
+  messages     ChatMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("chat_rooms")
+}
+
+// Participations aux conversations
+model ChatRoomParticipant {
+  id           String   @id @default(uuid())
+  roomId       String
+  room         ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lastReadAt   DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@unique([roomId, userId])
+  @@map("chat_room_participants")
+}
+
+// Messages dans les conversations
+model ChatMessage {
+  id           String      @id @default(uuid())
+  roomId       String
+  room         ChatRoom    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  senderId     String
+  sender       User        @relation(fields: [senderId], references: [id])
+  messageType  MessageType @default(TEXTE)
+  content      String?
+  mediaUrl     String?
+  replyToId    String?
+  replyTo      ChatMessage? @relation("MessageReply", fields: [replyToId], references: [id])
+  replies      ChatMessage[] @relation("MessageReply")
+  isDeleted    Boolean     @default(false)
+  readAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([roomId, createdAt])
+  @@map("chat_messages")
+}
+
+// Programmes (annuel, mensuel, hebdomadaire, journalier)
+enum ProgramType {
+  ANNUEL
+  MENSUEL
+  HEBDOMADAIRE
+  JOURNALIER
+}
+
+model Program {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  type        ProgramType
+  startDate   DateTime
+  endDate     DateTime?
+  location    String?
+  isActive    Boolean     @default(true)
+  authorId    String
+  author      User        @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("programs")
+}
+
+// Notifications utilisateur
+enum NotificationType {
+  MESSAGE
+  VERSE
+  EVENT
+  PROGRAM
+  MEDIA
+  PRAYER
+  LIVE
+  GENERAL
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  content   String?
+  link      String?
+  isRead    Boolean          @default(false)
+  readAt    DateTime?
+  senderId  String?
+  sender    User?            @relation("SentNotifications", fields: [senderId], references: [id])
+  relatedId String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
+
+// Prieres matinales publiees par les pasteurs et apotres
+model MorningPrayer {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  bibleVerse String?
+  imageUrl  String?
+  isActive  Boolean  @default(true)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("morning_prayers")
+}
+
+// Visites de profil
+model ProfileVisit {
+  id         String   @id @default(uuid())
+  profileId  String
+  profile    User     @relation("ProfileVisits", fields: [profileId], references: [id], onDelete: Cascade)
+  visitorId  String?
+  visitor    User?    @relation("VisitorVisits", fields: [visitorId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([profileId])
+  @@map("profile_visits")
+}
+
+// Suivi des lectures de posts
+model PostRead {
+  id        String   @id @default(uuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  readAt    DateTime @default(now())
+
+  @@unique([postId, userId])
+  @@map("post_reads")
+}
+
+// Messages de contact envoyes depuis le site
+model ContactMessage {
+  id         String   @id @default(uuid())
+  name       String
+  email      String
+  subject    String?
+  message    String
+  recipientType String @default("APOTRE") // APOTRE ou PASTEUR
+  recipientId String? // ID du pasteur si recipientType = PASTEUR
+  isRead     Boolean  @default(false)
+  readAt     DateTime?
+  repliedAt  DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@map("contact_messages")
+}
+
+// Codes OTP pour l'authentification sans mot de passe
+model Otp {
+  id        String   @id @default(uuid())
+  email     String
+  code      String
+  type      String   @default("LOGIN")
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  usedAt    DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([email, code])
+  @@index([email])
+  @@map("otps")
+}
+
+// Abonnes a la newsletter (sans inscription)
+model Subscription {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String?
+  isActive      Boolean   @default(true)
+  subscribedAt  DateTime  @default(now())
+  unsubscribedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@map("subscriptions")
+}
+
+// Vues de pages pour les statistiques du site
+model PageView {
+  id        String   @id @default(uuid())
+  page      String
+  referrer  String?
+  ip        String?
+  userAgent String?
+  userId    String?
+  visitedAt DateTime @default(now())
+
+  @@index([page])
+  @@index([visitedAt])
+  @@map("page_views")
+}

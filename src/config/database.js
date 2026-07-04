@@ -1,0 +1,20 @@
+const { PrismaClient } = require("@prisma/client");
+const { PrismaPg } = require("@prisma/adapter-pg");
+
+// Configuration de la connexion a PostgreSQL via Prisma
+const connectionString = process.env.DATABASE_URL;
+
+const adapter = new PrismaPg({ connectionString });
+
+const prisma = new PrismaClient({
+  adapter,
+  // Log des requetes SQL uniquement en developpement
+  log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+});
+
+// Deconnexion propre lors de l'arret du processus
+process.on("beforeExit", async () => {
+  await prisma.$disconnect();
+});
+
+module.exports = prisma;
