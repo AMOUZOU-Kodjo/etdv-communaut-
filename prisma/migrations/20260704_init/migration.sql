@@ -235,7 +235,6 @@ CREATE UNIQUE INDEX "chat_room_participants_roomId_userId_key" ON "chat_room_par
 CREATE INDEX "donations_donorId_idx" ON "donations"("donorId");
 CREATE INDEX "donations_churchId_idx" ON "donations"("churchId");
 CREATE INDEX "donations_eventId_idx" ON "donations"("eventId");
-CREATE UNIQUE INDEX "event_registrations_eventId_userId_key" ON "event_registrations"("eventId", "userId");
 
 -- AddForeignKeys
 ALTER TABLE "users" ADD CONSTRAINT "users_churchId_fkey" FOREIGN KEY ("churchId") REFERENCES "churches"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -389,6 +388,7 @@ CREATE TABLE "event_registrations" (
 ALTER TABLE "event_registrations" ADD CONSTRAINT "event_registrations_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "events"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "event_registrations" ADD CONSTRAINT "event_registrations_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "event_registrations" ADD CONSTRAINT "event_registrations_validatedById_fkey" FOREIGN KEY ("validatedById") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+CREATE UNIQUE INDEX "event_registrations_eventId_userId_key" ON "event_registrations"("eventId", "userId");
 ALTER TABLE "donations" ADD CONSTRAINT "donations_churchId_fkey" FOREIGN KEY ("churchId") REFERENCES "churches"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE "donations" ADD CONSTRAINT "donations_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "events"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
