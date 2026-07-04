@@ -13,8 +13,9 @@
     header p { text-align: center; opacity: 0.8; margin-top: 5px; font-size: 14px; }
 
     .card { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; overflow: hidden; }
-    .card-header { padding: 16px 20px; border-bottom: 1px solid #e2e8f0; font-weight: 600; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+    .card-header { padding: 14px 20px; border-bottom: 1px solid #e2e8f0; font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; }
     .card-body { padding: 20px; }
+
     .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
     .badge-get { background: #c6f6d5; color: #22543d; }
     .badge-post { background: #bee3f8; color: #1a365d; }
@@ -22,8 +23,6 @@
     .badge-delete { background: #fed7d7; color: #742a2a; }
     .badge-patch { background: #e9d8fd; color: #44337a; }
     .badge-auth { background: #fed7d7; color: #9b2c2c; }
-    .badge-pub { background: #c6f6d5; color: #22543d; }
-    .badge-lock { margin-left: 4px; }
 
     input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; transition: border-color 0.2s; }
     input:focus, textarea:focus, select:focus { outline: none; border-color: #3182ce; box-shadow: 0 0 0 3px rgba(49,130,206,0.1); }
@@ -48,15 +47,9 @@
     .response.success { border-left: 4px solid #38a169; }
     .response.error { border-left: 4px solid #e53e3e; }
 
-    .tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
     .tab { padding: 10px 16px; border-radius: 6px 6px 0 0; cursor: pointer; font-size: 13px; font-weight: 500; background: #edf2f7; border: none; }
     .tab.active { background: white; border-bottom: 2px solid #3182ce; }
-
-    .endpoint-list { display: grid; gap: 6px; }
-    .endpoint-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; transition: background 0.15s; }
-    .endpoint-item:hover { background: #edf2f7; }
-    .endpoint-item .path { font-family: monospace; color: #2d3748; }
-    .endpoint-item .desc { color: #718096; font-size: 12px; }
 
     .config-bar { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
     .config-bar .form-group { margin-bottom: 0; flex: 1; min-width: 200px; }
@@ -65,6 +58,31 @@
     .otp-status { text-align: center; padding: 10px; border-radius: 6px; margin-top: 10px; }
     .otp-status.sent { background: #c6f6d5; color: #22543d; }
     .otp-status.verified { background: #c6f6d5; color: #22543d; }
+
+    /* Groupe d'endpoints */
+    .api-group { margin-bottom: 24px; }
+    .api-group-title { font-size: 16px; font-weight: 700; color: #2b6cb0; padding: 10px 0; border-bottom: 2px solid #2b6cb0; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .api-group-subtitle { font-size: 12px; color: #718096; font-weight: 400; }
+
+    .endpoint-card { border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 10px; overflow: hidden; }
+    .endpoint-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; background: #fafbfc; transition: background 0.15s; }
+    .endpoint-header:hover { background: #edf2f7; }
+    .endpoint-header .method { min-width: 70px; text-align: center; }
+    .endpoint-header .path { font-family: 'SF Mono', Monaco, monospace; font-size: 13px; font-weight: 500; flex: 1; }
+    .endpoint-header .role { font-size: 11px; color: #718096; }
+    .endpoint-doc { display: none; padding: 14px; border-top: 1px solid #e2e8f0; background: #fff; }
+    .endpoint-doc.open { display: block; }
+    .endpoint-doc .doc-section { margin-bottom: 10px; }
+    .endpoint-doc .doc-section strong { font-size: 12px; color: #4a5568; display: block; margin-bottom: 4px; }
+    .endpoint-doc .doc-section p, .endpoint-doc .doc-section ul { font-size: 13px; color: #4a5568; line-height: 1.5; }
+    .endpoint-doc .doc-section ul { padding-left: 18px; }
+    .endpoint-doc pre { background: #f7fafc; padding: 10px; border-radius: 4px; font-size: 12px; overflow-x: auto; border: 1px solid #e2e8f0; }
+    .endpoint-doc .try-btn { margin-top: 8px; }
+
+    .nav-sidebar { position: sticky; top: 20px; }
+    .nav-sidebar a { display: block; padding: 6px 0; color: #4a5568; text-decoration: none; font-size: 13px; }
+    .nav-sidebar a:hover { color: #2b6cb0; }
+    .nav-sidebar .nav-group { font-weight: 600; color: #2d3748; margin-top: 8px; }
 
     @media (max-width: 768px) {
       .form-row { grid-template-columns: 1fr; }
@@ -94,7 +112,7 @@
             <label>Token JWT</label>
             <input id="jwtToken" placeholder="Coller le token apres connexion..." style="font-family:monospace;font-size:12px;">
           </div>
-          <button class="btn-outline btn-sm" onclick="document.getElementById('jwtToken').value=''" style="margin-bottom:0;">Effacer</button>
+          <button class="btn-outline btn-sm" onclick="document.getElementById('jwtToken').value='';document.getElementById('userInfo').innerHTML='<div style=\\'color:#718096;\\'>Deconnecte.</div>'" style="margin-bottom:0;">Effacer token</button>
         </div>
       </div>
     </div>
@@ -102,7 +120,7 @@
     <!-- Tabs -->
     <div class="tabs">
       <button class="tab active" data-tab="otp" onclick="switchTab('otp')">📱 OTP Flow</button>
-      <button class="tab" data-tab="endpoints" onclick="switchTab('endpoints')">📋 Tous les endpoints</button>
+      <button class="tab" data-tab="docs" onclick="switchTab('docs')">📚 Documentation</button>
       <button class="tab" data-tab="console" onclick="switchTab('console')">🛠 Console API</button>
     </div>
 
@@ -111,6 +129,7 @@
       <div class="card">
         <div class="card-header">📱 Connexion par OTP (sans mot de passe)</div>
         <div class="card-body">
+          <p style="font-size:13px;color:#718096;margin-bottom:14px;">1. Entrez votre email → cliquez "Envoyer le code" → un code à 6 chiffres vous est envoyé.<br>2. Saisissez le code → cliquez "Vérifier" → le token est automatiquement copié dans le champ JWT.</p>
           <div class="form-row">
             <div class="form-group">
               <label>Email</label>
@@ -123,15 +142,15 @@
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Prénom (nouveau compte)</label>
+              <label>Prénom (si nouveau compte)</label>
               <input id="otpFirstName" placeholder="Jean">
             </div>
             <div class="form-group">
-              <label>Nom (nouveau compte)</label>
+              <label>Nom (si nouveau compte)</label>
               <input id="otpLastName" placeholder="Dupont">
             </div>
           </div>
-          <div class="form-row">
+          <div class="form-row" style="margin-bottom:10px;">
             <div class="form-group">
               <label>Téléphone</label>
               <input id="otpPhone" placeholder="+22800000000">
@@ -146,22 +165,19 @@
           <div id="otpResponse" class="response" style="display:none;"></div>
         </div>
       </div>
-
       <div class="card">
-        <div class="card-header">🔑 Informations de connexion</div>
-        <div class="card-body" id="userInfo" style="font-size:14px;color:#718096;">
-          Connectez-vous avec OTP pour voir vos infos ici.
-        </div>
+        <div class="card-header">👤 Connecté en tant que</div>
+        <div class="card-body" id="userInfo" style="font-size:14px;color:#718096;">Connectez-vous avec OTP pour voir vos infos ici.</div>
       </div>
     </div>
 
-    <!-- Tab: All Endpoints -->
-    <div id="tab-endpoints" class="tab-content" style="display:none;">
+    <!-- Tab: Documentation complete -->
+    <div id="tab-docs" class="tab-content" style="display:none;">
       <div class="card">
-        <div class="card-header">📋 Tous les endpoints</div>
+        <div class="card-header">📚 Documentation des endpoints</div>
         <div class="card-body">
-          <input id="endpointSearch" type="text" placeholder="Rechercher un endpoint..." oninput="filterEndpoints()" style="margin-bottom:12px;">
-          <div id="endpointList" class="endpoint-list"></div>
+          <input id="docSearch" type="text" placeholder="Rechercher un endpoint, une description..." oninput="filterDocs()" style="margin-bottom:16px;">
+          <div id="docsContainer"></div>
         </div>
       </div>
     </div>
@@ -169,21 +185,17 @@
     <!-- Tab: Console API -->
     <div id="tab-console" class="tab-content" style="display:none;">
       <div class="card">
-        <div class="card-header">🛠 Console API — tester n'importe quel endpoint</div>
+        <div class="card-header">🛠 Console API</div>
         <div class="card-body">
           <div class="form-row" style="margin-bottom:12px;">
             <div class="form-group">
               <label>Méthode</label>
               <select id="consoleMethod">
-                <option>GET</option>
-                <option>POST</option>
-                <option>PUT</option>
-                <option>DELETE</option>
-                <option>PATCH</option>
+                <option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option><option>PATCH</option>
               </select>
             </div>
             <div class="form-group">
-              <label>Endpoint (ex: /churches, /users/me)</label>
+              <label>Endpoint (ex: /churches, /auth/me)</label>
               <input id="consoleEndpoint" value="/auth/me" placeholder="/auth/me">
             </div>
           </div>
@@ -191,33 +203,24 @@
             <label>Body (JSON) — optionnel</label>
             <textarea id="consoleBody" placeholder='{ "key": "value" }'></textarea>
           </div>
-          <button class="btn-primary" onclick="sendRequest()">🚀 Envoyer la requête</button>
+          <button class="btn-primary" onclick="sendRequest()">🚀 Envoyer la requete</button>
           <div id="consoleResponse" class="response" style="display:none;"></div>
         </div>
-      </div>
-    </div>
-
-    <!-- Footer note -->
-    <div class="card">
-      <div class="card-header">📖 Documentation</div>
-      <div class="card-body" style="font-size:14px;color:#718096;text-align:center;">
-        Consultez <strong>document.md</strong> pour la documentation complète de l'API.<br>
-        Tous les endpoints, schémas de requête/réponse, permissions et codes d'erreur y sont détaillés.
       </div>
     </div>
   </div>
 
   <script>
-    // ===================== CONFIG =====================
-    function getBase() { return document.getElementById('baseUrl').value.replace(/\/+$/, ''); }
-    function getToken() { return document.getElementById('jwtToken').value; }
+    const BASE = document.getElementById('baseUrl');
+    const TOKEN_INPUT = document.getElementById('jwtToken');
+    function getBase() { return BASE.value.replace(/\/+$/, ''); }
+    function getToken() { return TOKEN_INPUT.value; }
     function headers(auth) {
       const h = { 'Content-Type': 'application/json' };
       if (auth && getToken()) h['Authorization'] = `Bearer ${getToken()}`;
       return h;
     }
 
-    // ===================== SWITCH TAB =====================
     function switchTab(name) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
@@ -226,40 +229,31 @@
     }
 
     // ===================== OTP FLOW =====================
-    let otpTimerInterval = null;
-    let otpExpiresAt = null;
-
+    let otpTimerInterval = null, otpExpiresAt = null;
     async function sendOtp() {
       const email = document.getElementById('otpEmail').value;
       if (!email) return showOtpError('Email requis');
       const btn = document.getElementById('sendOtpBtn');
-      btn.disabled = true;
-      btn.textContent = '⏳ Envoi...';
+      btn.disabled = true; btn.textContent = '⏳ Envoi...';
       try {
         const res = await fetch(`${getBase()}/auth/otp/send`, { method: 'POST', headers: headers(false), body: JSON.stringify({ email }) });
         const data = await res.json();
         showOtpResponse(data, res.ok);
         if (res.ok) {
-          document.getElementById('otpStatus').innerHTML = '<div class="otp-status sent">✅ Code envoyé à ' + email + '</div>';
+          document.getElementById('otpStatus').innerHTML = '<div class="otp-status sent">✅ Code envoye a ' + email + '</div>';
           startOtpTimer();
         }
-      } catch (e) {
-        showOtpError(e.message);
-      }
-      btn.disabled = false;
-      btn.textContent = '📨 Envoyer le code';
+      } catch (e) { showOtpError(e.message); }
+      btn.disabled = false; btn.textContent = '📨 Envoyer le code';
     }
-
     async function verifyOtp() {
       const email = document.getElementById('otpEmail').value;
       const code = document.getElementById('otpCode').value;
       if (!email || !code) return showOtpError('Email et code requis');
       const btn = document.getElementById('verifyOtpBtn');
-      btn.disabled = true;
-      btn.textContent = '⏳ Verification...';
+      btn.disabled = true; btn.textContent = '⏳ Verification...';
       const body = { email, code };
-      const fn = document.getElementById('otpFirstName').value;
-      const ln = document.getElementById('otpLastName').value;
+      const fn = document.getElementById('otpFirstName').value, ln = document.getElementById('otpLastName').value;
       if (fn) body.firstName = fn;
       if (ln) body.lastName = ln;
       const ph = document.getElementById('otpPhone').value;
@@ -269,18 +263,14 @@
         const data = await res.json();
         showOtpResponse(data, res.ok);
         if (res.ok) {
-          document.getElementById('otpStatus').innerHTML = '<div class="otp-status verified">✅ Connecté ! Token stocke</div>';
-          document.getElementById('jwtToken').value = data.data.accessToken;
+          document.getElementById('otpStatus').innerHTML = '<div class="otp-status verified">✅ Connecte ! Token stocke</div>';
+          TOKEN_INPUT.value = data.data.accessToken;
           stopOtpTimer();
           loadUserInfo();
         }
-      } catch (e) {
-        showOtpError(e.message);
-      }
-      btn.disabled = false;
-      btn.textContent = '✅ Verifier';
+      } catch (e) { showOtpError(e.message); }
+      btn.disabled = false; btn.textContent = '✅ Verifier';
     }
-
     function startOtpTimer() {
       stopOtpTimer();
       otpExpiresAt = Date.now() + 5 * 60 * 1000;
@@ -289,31 +279,12 @@
       otpTimerInterval = setInterval(() => {
         const left = Math.max(0, Math.floor((otpExpiresAt - Date.now()) / 1000));
         if (left <= 0) { el.textContent = '⏰ Expire'; stopOtpTimer(); return; }
-        const m = Math.floor(left / 60);
-        const s = left % 60;
-        el.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+        el.textContent = `${Math.floor(left/60)}:${(left%60).toString().padStart(2,'0')}`;
       }, 1000);
     }
-
-    function stopOtpTimer() {
-      if (otpTimerInterval) { clearInterval(otpTimerInterval); otpTimerInterval = null; }
-      document.getElementById('otpTimer').style.display = 'none';
-    }
-
-    function showOtpResponse(data, ok) {
-      const el = document.getElementById('otpResponse');
-      el.style.display = 'block';
-      el.className = `response ${ok ? 'success' : 'error'}`;
-      el.textContent = JSON.stringify(data, null, 2);
-    }
-
-    function showOtpError(msg) {
-      const el = document.getElementById('otpResponse');
-      el.style.display = 'block';
-      el.className = 'response error';
-      el.textContent = JSON.stringify({ success: false, message: msg }, null, 2);
-    }
-
+    function stopOtpTimer() { if (otpTimerInterval) { clearInterval(otpTimerInterval); otpTimerInterval = null; } document.getElementById('otpTimer').style.display = 'none'; }
+    function showOtpResponse(data, ok) { const el = document.getElementById('otpResponse'); el.style.display='block'; el.className=`response ${ok?'success':'error'}`; el.textContent=JSON.stringify(data,null,2); }
+    function showOtpError(msg) { const el=document.getElementById('otpResponse'); el.style.display='block'; el.className='response error'; el.textContent=JSON.stringify({success:false,message:msg},null,2); }
     async function loadUserInfo() {
       if (!getToken()) return;
       try {
@@ -321,139 +292,636 @@
         const data = await res.json();
         if (res.ok) {
           const u = data.data;
-          document.getElementById('userInfo').innerHTML = `
-            <table style="width:100%;border-collapse:collapse;">
-              <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:500;">ID</td><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-family:monospace;font-size:12px;">${u.id}</td></tr>
-              <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:500;">Email</td><td style="padding:8px;border-bottom:1px solid #e2e8f0;">${u.email}</td></tr>
-              <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:500;">Nom</td><td style="padding:8px;border-bottom:1px solid #e2e8f0;">${u.firstName} ${u.lastName}</td></tr>
-              <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:500;">Role</td><td style="padding:8px;border-bottom:1px solid #e2e8f0;"><span class="badge badge-post">${u.role}</span></td></tr>
-              <tr><td style="padding:8px;font-weight:500;">Compte créé</td><td style="padding:8px;">${new Date(u.createdAt).toLocaleString()}</td></tr>
-            </table>
-          `;
+          document.getElementById('userInfo').innerHTML = `<table style="width:100%;border-collapse:collapse;">
+            <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:500;">ID</td><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-family:monospace;font-size:12px;">${u.id}</td></tr>
+            <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:500;">Email</td><td style="padding:8px;border-bottom:1px solid #e2e8f0;">${u.email}</td></tr>
+            <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:500;">Nom</td><td style="padding:8px;border-bottom:1px solid #e2e8f0;">${u.firstName} ${u.lastName}</td></tr>
+            <tr><td style="padding:8px;border-bottom:1px solid #e2e8f0;font-weight:500;">Role</td><td style="padding:8px;border-bottom:1px solid #e2e8f0;"><span class="badge badge-post">${u.role}</span></td></tr>
+            <tr><td style="padding:8px;font-weight:500;">Compte cree</td><td style="padding:8px;">${new Date(u.createdAt).toLocaleString()}</td></tr>
+          </table>`;
         }
-      } catch (e) {}
+      } catch(e) {}
     }
 
-    // ===================== ENDPOINT LIST =====================
-    const endpoints = [
-      { method: 'POST', path: '/auth/otp/send', auth: false, desc: 'Envoyer OTP par email' },
-      { method: 'POST', path: '/auth/otp/verify', auth: false, desc: 'Verifier OTP et connecter' },
-      { method: 'POST', path: '/auth/register', auth: false, desc: 'Inscription (admin)' },
-      { method: 'POST', path: '/auth/login', auth: false, desc: 'Connexion mot de passe' },
-      { method: 'POST', path: '/auth/refresh', auth: false, desc: 'Rafraichir token' },
-      { method: 'POST', path: '/auth/logout', auth: false, desc: 'Deconnexion' },
-      { method: 'GET', path: '/auth/me', auth: true, desc: 'Mon profil' },
-      { method: 'GET', path: '/users', auth: true, desc: 'Liste utilisateurs (ADMIN/APOTRE/PASTEUR)' },
-      { method: 'GET', path: '/users/:id', auth: true, desc: 'Detail utilisateur' },
-      { method: 'PUT', path: '/users/:id', auth: true, desc: 'Modifier utilisateur' },
-      { method: 'DELETE', path: '/users/:id', auth: true, desc: 'Supprimer utilisateur' },
-      { method: 'POST', path: '/users', auth: true, desc: 'Creer un membre' },
-      { method: 'PUT', path: '/users/profile/me', auth: true, desc: 'Mettre a jour mon profil' },
-      { method: 'DELETE', path: '/users/profile/avatar', auth: true, desc: 'Supprimer avatar' },
-      { method: 'PUT', path: '/users/password/me', auth: true, desc: 'Changer mot de passe' },
-      { method: 'GET', path: '/users/:id/visits', auth: true, desc: 'Stats visites profil' },
-      { method: 'GET', path: '/churches', auth: false, desc: 'Liste eglises' },
-      { method: 'GET', path: '/churches/:id', auth: false, desc: 'Detail eglise' },
-      { method: 'POST', path: '/churches', auth: true, desc: 'Creer eglise (ADMIN/APOTRE)' },
-      { method: 'PUT', path: '/churches/:id', auth: true, desc: 'Modifier eglise' },
-      { method: 'DELETE', path: '/churches/:id', auth: true, desc: 'Supprimer eglise' },
-      { method: 'GET', path: '/churches/directory/leadership', auth: true, desc: 'Annuaires responsables' },
-      { method: 'GET', path: '/churches/directory/members', auth: true, desc: 'Annuaires membres' },
-      { method: 'GET', path: '/churches/directory/visitors', auth: true, desc: 'Annuaires visiteurs' },
-      { method: 'POST', path: '/chat', auth: true, desc: 'Demarrer conversation' },
-      { method: 'GET', path: '/chat', auth: true, desc: 'Mes conversations' },
-      { method: 'GET', path: '/chat/:roomId', auth: true, desc: 'Messages conversation' },
-      { method: 'POST', path: '/chat/:roomId/messages', auth: true, desc: 'Envoyer message' },
-      { method: 'DELETE', path: '/chat/messages/:messageId', auth: true, desc: 'Supprimer message' },
-      { method: 'PUT', path: '/chat/:roomId/read', auth: true, desc: 'Marquer comme lu' },
-      { method: 'GET', path: '/media', auth: false, desc: 'Medias publies' },
-      { method: 'GET', path: '/media/pending', auth: true, desc: 'Medias en attente' },
-      { method: 'GET', path: '/media/:id', auth: false, desc: 'Detail media' },
-      { method: 'POST', path: '/media', auth: true, desc: 'Publier media' },
-      { method: 'PUT', path: '/media/approve/:id', auth: true, desc: 'Approuver media' },
-      { method: 'PUT', path: '/media/:id', auth: true, desc: 'Modifier media' },
-      { method: 'DELETE', path: '/media/:id', auth: true, desc: 'Supprimer media' },
-      { method: 'PATCH', path: '/media/:id/visibility', auth: true, desc: 'Masquer/afficher media' },
-      { method: 'GET', path: '/notifications', auth: true, desc: 'Mes notifications' },
-      { method: 'PUT', path: '/notifications/read-all', auth: true, desc: 'Tout marquer lu' },
-      { method: 'PUT', path: '/notifications/:id/read', auth: true, desc: 'Marquer notification lue' },
-      { method: 'DELETE', path: '/notifications/:id', auth: true, desc: 'Supprimer notification' },
-      { method: 'GET', path: '/programs', auth: false, desc: 'Liste programmes' },
-      { method: 'GET', path: '/programs/daily-verse', auth: false, desc: 'Verset du jour' },
-      { method: 'GET', path: '/programs/:id', auth: false, desc: 'Detail programme' },
-      { method: 'POST', path: '/programs', auth: true, desc: 'Creer programme' },
-      { method: 'PUT', path: '/programs/:id', auth: true, desc: 'Modifier programme' },
-      { method: 'DELETE', path: '/programs/:id', auth: true, desc: 'Supprimer programme' },
-      { method: 'GET', path: '/events', auth: false, desc: 'Liste evenements' },
-      { method: 'GET', path: '/events/:id', auth: false, desc: 'Detail evenement' },
-      { method: 'POST', path: '/events', auth: true, desc: 'Creer evenement' },
-      { method: 'PUT', path: '/events/:id', auth: true, desc: 'Modifier evenement' },
-      { method: 'DELETE', path: '/events/:id', auth: true, desc: 'Supprimer evenement' },
-      { method: 'GET', path: '/posts', auth: false, desc: 'Liste publications' },
-      { method: 'GET', path: '/posts/:id', auth: false, desc: 'Detail publication' },
-      { method: 'POST', path: '/posts', auth: true, desc: 'Creer publication' },
-      { method: 'PUT', path: '/posts/:id', auth: true, desc: 'Modifier publication' },
-      { method: 'DELETE', path: '/posts/:id', auth: true, desc: 'Supprimer publication' },
-      { method: 'POST', path: '/posts/:id/read', auth: true, desc: 'Marquer post lu' },
-      { method: 'GET', path: '/posts/:id/readers', auth: true, desc: 'Lecteurs du post' },
-      { method: 'GET', path: '/prieres-matinales', auth: false, desc: 'Prieres matinales' },
-      { method: 'GET', path: '/prieres-matinales/:id', auth: false, desc: 'Detail priere' },
-      { method: 'POST', path: '/prieres-matinales', auth: true, desc: 'Publier priere' },
-      { method: 'GET', path: '/live', auth: false, desc: 'Diffusions direct' },
-      { method: 'GET', path: '/live/current', auth: false, desc: 'Direct en cours' },
-      { method: 'GET', path: '/live/:id', auth: false, desc: 'Detail direct' },
-      { method: 'POST', path: '/live', auth: true, desc: 'Creer direct' },
-      { method: 'PUT', path: '/live/:id', auth: true, desc: 'Modifier direct' },
-      { method: 'DELETE', path: '/live/:id', auth: true, desc: 'Supprimer direct' },
-      { method: 'GET', path: '/live/sync/youtube', auth: true, desc: 'Sync YouTube' },
-      { method: 'GET', path: '/live/youtube/:videoId', auth: false, desc: 'Infos video YouTube' },
-      { method: 'POST', path: '/events/:eventId/register', auth: true, desc: 'S\'inscrire evenement' },
-      { method: 'GET', path: '/registrations/me', auth: true, desc: 'Mes inscriptions' },
-      { method: 'GET', path: '/registrations/:id/receipt', auth: true, desc: 'Recu inscription' },
-      { method: 'PUT', path: '/registrations/:id/validate', auth: true, desc: 'Valider inscription' },
-      { method: 'GET', path: '/events/:id/registrations', auth: true, desc: 'Liste inscrits' },
-      { method: 'DELETE', path: '/registrations/:id', auth: true, desc: 'Annuler inscription' },
-      { method: 'POST', path: '/donations', auth: true, desc: 'Faire un don' },
-      { method: 'GET', path: '/donations/me', auth: true, desc: 'Mes dons' },
-      { method: 'GET', path: '/donations', auth: true, desc: 'Tous les dons' },
-      { method: 'PUT', path: '/donations/:id/confirm', auth: true, desc: 'Confirmer don' },
-      { method: 'POST', path: '/contact', auth: false, desc: 'Envoyer message contact' },
-      { method: 'GET', path: '/contact', auth: true, desc: 'Messages contact' },
-      { method: 'PUT', path: '/contact/:id/read', auth: true, desc: 'Marquer message lu' },
-      { method: 'DELETE', path: '/contact/:id', auth: true, desc: 'Supprimer message' },
-      { method: 'GET', path: '/stats/dashboard', auth: true, desc: 'Dashboard (ADMIN/APOTRE)' },
-      { method: 'GET', path: '/stats', auth: true, desc: 'Stats generales' },
-      { method: 'GET', path: '/stats/churches/:churchId', auth: true, desc: 'Stats eglise' },
-      { method: 'POST', path: '/stats/track', auth: false, desc: 'Tracker page vue' },
-      { method: 'POST', path: '/subscriptions', auth: false, desc: 'S\'abonner newsletter' },
-      { method: 'POST', path: '/subscriptions/unsubscribe', auth: false, desc: 'Se desabonner' },
-      { method: 'GET', path: '/subscriptions', auth: true, desc: 'Abonnes (ADMIN/APOTRE)' },
+    // ===================== DOCUMENTATION =====================
+    const apiGroups = [
+      {
+        name: '🔐 Authentification',
+        subtitle: 'Inscription, connexion, OTP, gestion de session',
+        endpoints: [
+          { method:'POST', path:'/auth/otp/send', auth:false, roles:'Tous', 
+            desc:'Envoyer un code OTP a 6 chiffres par email.',
+            howto:'1. Envoyer { "email": "user@example.com" }. 2. Un code arrive dans la boite mail. 3. Le code expire dans 5 minutes.',
+            body:'{ "email": "user@example.com" }',
+            res:'{ "success": true, "message": "Code OTP envoye a user@example.com", "data": { "expiresIn": 300 } }' },
+          { method:'POST', path:'/auth/otp/verify', auth:false, roles:'Tous',
+            desc:'Verifier le code OTP. Si le compte n\'existe pas, il est automatiquement cree avec le role VISITEUR.',
+            howto:'Envoyer email + code + (firstName/lastName/phone si nouveau compte). En retour, vous obtenez accessToken et refreshToken.',
+            body:'{ "email": "user@example.com", "code": "123456", "firstName": "Jean", "lastName": "Dupont", "phone": "+22800000000" }',
+            res:'{ "success": true, "data": { "accessToken": "eyJ...", "refreshToken": "eyJ...", "user": { "id": "...", "email": "...", "role": "VISITEUR" } } }' },
+          { method:'POST', path:'/auth/register', auth:false, roles:'Tous',
+            desc:'Inscription classique avec email et mot de passe.',
+            howto:'Cree un compte avec le role indique (defaut: VISITEUR). Le mot de passe doit contenir au moins 6 caracteres.',
+            body:'{ "email": "admin@eglise.com", "password": "secure123", "firstName": "Admin", "lastName": "User", "role": "ADMIN" }',
+            res:'{ "success": true, "data": { "user": { "id": "...", "email": "...", "role": "ADMIN" }, "accessToken": "..." } }' },
+          { method:'POST', path:'/auth/login', auth:false, roles:'Tous',
+            desc:'Connexion avec email et mot de passe.',
+            howto:'Utilisez cette route si vous avez deja un mot de passe. Sinon, preferez le flux OTP.',
+            body:'{ "email": "user@example.com", "password": "secure123" }',
+            res:'{ "success": true, "data": { "accessToken": "...", "refreshToken": "...", "user": {...} } }' },
+          { method:'POST', path:'/auth/refresh', auth:false, roles:'Tous',
+            desc:'Rafraichir le token d\'acces avec le refreshToken stocke dans le cookie httpOnly.',
+            howto:'Appelez cette route sans body. Le cookie refreshToken doit etre present (envoye automatiquement par le navigateur).',
+            body:'Aucun body. Le refreshToken est dans le cookie.',
+            res:'{ "success": true, "data": { "accessToken": "..." } }' },
+          { method:'POST', path:'/auth/logout', auth:true, roles:'Tous',
+            desc:'Deconnexion : invalide le refreshToken en base et efface le cookie.',
+            howto:'Appelez avec le token d\'acces dans le header Authorization.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Deconnexion reussie" }' },
+          { method:'GET', path:'/auth/me', auth:true, roles:'Tous',
+            desc:'Retourne les informations de l\'utilisateur connecte (id, email, role, profil, eglise).',
+            howto:'Header requis: Authorization: Bearer <token>. Aucun body.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "id": "...", "email": "...", "role": "ADMIN", "firstName": "...", "lastName": "...", "profile": {...}, "church": {...} } }' },
+        ]
+      },
+      {
+        name: '👥 Utilisateurs',
+        subtitle: 'Gestion des membres, profils, roles, permissions',
+        endpoints: [
+          { method:'GET', path:'/users', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Liste des utilisateurs. Filtrée selon le role : ADMIN voit tout, APOTRE voit tout sauf les ADMIN, PASTEUR voit seulement les membres de son eglise.',
+            howto:'Optionnel: ?page=1&limit=20&search=nom&role=FIDELES&churchId=...',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "users": [...], "total": 50, "page": 1, "totalPages": 3 } }' },
+          { method:'GET', path:'/users/:id', auth:true, roles:'Tous',
+            desc:'Detail d\'un utilisateur avec son profil. Enregistre une visite du profil si l\'utilisateur connecte n\'est pas le proprietaire.',
+            howto:'Remplacez :id par l\'ID de l\'utilisateur. Ex: /users/abc123',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "id": "...", "firstName": "...", "lastName": "...", "email": "...", "role": "...", "profile": {...} } }' },
+          { method:'PUT', path:'/users/:id', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Modifier un utilisateur. PASTEUR ne peut modifier que les membres de son eglise. APOTRE peut modifier tout sauf les ADMIN.',
+            howto:'Seuls les champs fournis sont mis a jour. Ex: { "firstName": "Nouveau", "role": "FIDELES", "churchId": "..." }',
+            body:'{ "firstName": "Jean", "lastName": "Marc", "role": "FIDELES", "isActive": true, "churchId": "..." }',
+            res:'{ "success": true, "data": { "user": {...} } }' },
+          { method:'DELETE', path:'/users/:id', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Supprimer un utilisateur. APOTRE ne peut pas supprimer les ADMIN.',
+            howto:'La suppression est irreversible.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Utilisateur supprime" }' },
+          { method:'POST', path:'/users', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Creer un nouveau membre avec email + mot de passe.',
+            howto:'PASTEUR ne peut creer que dans son eglise. Le role par defaut est FIDELES.',
+            body:'{ "email": "nouveau@eglise.com", "password": "pass123", "firstName": "Jean", "lastName": "Marc", "phone": "+22800000000", "role": "FIDELES", "churchId": "..." }',
+            res:'{ "success": true, "data": { "user": {...} } }' },
+          { method:'PUT', path:'/users/profile/me', auth:true, roles:'Tous',
+            desc:'Mettre a jour son propre profil (bio, adresse, date naissance, genre, statut marital, ministere, avatar, etc.).',
+            howto:'Champs optionnels. Ex: { "bio": "Serviteur de Dieu", "ministry": "DIACRE", "avatarUrl": "https://..." }',
+            body:'{ "bio": "...", "address": "...", "dateOfBirth": "1990-01-01", "gender": "HOMME", "maritalStatus": "MARIE", "ministry": "DIACRE", "avatarUrl": "https://...", "profession": "...", "city": "...", "country": "..." }',
+            res:'{ "success": true, "data": { "profile": {...} } }' },
+          { method:'DELETE', path:'/users/profile/avatar', auth:true, roles:'Tous',
+            desc:'Supprimer sa photo de profil (avatarUrl).',
+            howto:'Remet avatarUrl a null.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "profile": {...} } }' },
+          { method:'PUT', path:'/users/password/me', auth:true, roles:'Tous',
+            desc:'Changer son propre mot de passe.',
+            howto:'Fournir l\'ancien et le nouveau mot de passe.',
+            body:'{ "currentPassword": "ancien", "newPassword": "nouveau123" }',
+            res:'{ "success": true, "message": "Mot de passe mis a jour" }' },
+          { method:'GET', path:'/users/:id/visits', auth:true, roles:'PASTEUR, APOTRE, ADMIN',
+            desc:'Statistiques de visites du profil d\'un utilisateur.',
+            howto:'Retourne le nombre total de visites et la liste des visiteurs avec dates.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "totalVisits": 15, "visits": [...] } }' },
+        ]
+      },
+      {
+        name: '🏛️ Eglises',
+        subtitle: 'Gestion des eglises, annuaire des membres',
+        endpoints: [
+          { method:'GET', path:'/churches', auth:false, roles:'Tous',
+            desc:'Liste de toutes les eglises actives.',
+            howto:'Public. Retourne le nom, adresse, ville, telephone, email, site web, logo.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/churches/:id', auth:false, roles:'Tous',
+            desc:'Detail d\'une eglise avec toutes ses informations (coordonnees, horaires, reseaux sociaux).',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "id": "...", "name": "...", "address": "...", "latitude": 6.12, "longitude": 1.22, "serviceHours": "...", "socialMedia": "..." } }' },
+          { method:'POST', path:'/churches', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Creer une nouvelle eglise.',
+            howto:'Tous les champs sauf name sont optionnels.',
+            body:'{ "name": "ETDV Centre", "address": "Lome", "city": "Lome", "country": "Togo", "phone": "+22800000000", "email": "contact@eglise.com", "website": "https://...", "logoUrl": "https://...", "description": "...", "latitude": 6.12, "longitude": 1.22, "serviceHours": "Dim 8h-12h", "socialMedia": "FB:..." }',
+            res:'{ "success": true, "data": { "church": {...} } }' },
+          { method:'PUT', path:'/churches/:id', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Modifier une eglise.',
+            howto:'Seuls les champs fournis sont mis a jour.',
+            body:'{ "name": "Nouveau nom", "phone": "+22811111111" }',
+            res:'{ "success": true, "data": { "church": {...} } }' },
+          { method:'DELETE', path:'/churches/:id', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Supprimer une eglise.',
+            howto:'Supprime l\'eglise de maniere irreversible.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Eglise supprimee" }' },
+          { method:'GET', path:'/churches/directory/leadership', auth:true, roles:'Tous',
+            desc:'Annuaire des responsables (PASTEUR_TITULAIRE, PASTEUR_ADJOINT, APOTRE, etc.).',
+            howto:'Optionnel: ?churchId=... pour filtrer par eglise.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/churches/directory/members', auth:true, roles:'Tous',
+            desc:'Annuaire des membres (role FIDELES).',
+            howto:'Optionnel: ?churchId=... pour filtrer par eglise.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/churches/directory/visitors', auth:true, roles:'Tous',
+            desc:'Annuaire des visiteurs (role VISITEUR).',
+            howto:'Optionnel: ?churchId=... pour filtrer par eglise.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+        ]
+      },
+      {
+        name: '💬 Messagerie',
+        subtitle: 'Chat prive, conversations, messages multimedia, presence temps reel',
+        endpoints: [
+          { method:'POST', path:'/chat', auth:true, roles:'Tous',
+            desc:'Demarrer une nouvelle conversation privee avec un autre utilisateur.',
+            howto:'Fournir le userId du destinataire. Si une conversation existe deja entre les deux, elle est retournee.',
+            body:'{ "participantId": "id-du-destinataire" }',
+            res:'{ "success": true, "data": { "room": { "id": "...", "participants": [...] }, "isNew": true/false } }' },
+          { method:'GET', path:'/chat', auth:true, roles:'Tous',
+            desc:'Lister toutes ses conversations avec le nombre de messages non lus par conversation.',
+            howto:'Retourne les conversations triees par date du dernier message.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "conversations": [{ "roomId": "...", "participant": {...}, "lastMessage": "...", "unreadCount": 3, "updatedAt": "..." }] } }' },
+          { method:'GET', path:'/chat/:roomId', auth:true, roles:'Tous',
+            desc:'Lister les messages d\'une conversation. Pagine par 50 messages.',
+            howto:'Optionnel: ?page=1&limit=50',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "messages": [...], "total": 120, "page": 1 } }' },
+          { method:'POST', path:'/chat/:roomId/messages', auth:true, roles:'Tous',
+            desc:'Envoyer un message dans une conversation. Supporte les types TEXTE, AUDIO, IMAGE, VIDEO, LIEN.',
+            howto:'Pour un texte: { "messageType": "TEXTE", "content": "Bonjour" }. Pour un media: { "messageType": "IMAGE", "mediaUrl": "https://...", "content": "optionnel" }. Pour repondre: { "content": "reponse", "replyToId": "id-du-message" }',
+            body:'{ "messageType": "TEXTE", "content": "Bonjour!", "replyToId": null }',
+            res:'{ "success": true, "data": { "message": {...} } }' },
+          { method:'DELETE', path:'/chat/messages/:messageId', auth:true, roles:'Tous',
+            desc:'Supprimer un message (soft delete : le message reste mais est marque comme supprime).',
+            howto:'Seul l\'expediteur du message peut le supprimer.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Message supprime" }' },
+          { method:'PUT', path:'/chat/:roomId/read', auth:true, roles:'Tous',
+            desc:'Marquer tous les messages d\'une conversation comme lus.',
+            howto:'Met a jour le lastReadAt du participant.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "lastReadAt": "..." } }' },
+        ]
+      },
+      {
+        name: '📸 Galerie Media',
+        subtitle: 'Photos, audios, videos avec workflow d\'approbation',
+        endpoints: [
+          { method:'GET', path:'/media', auth:false, roles:'Tous',
+            desc:'Liste des medias publies et approuves.',
+            howto:'Optionnel: ?type=PHOTO&page=1&limit=20',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/media/pending', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Liste des medias en attente d\'approbation.',
+            howto:'Reserve aux administrateurs et pasteurs.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/media/:id', auth:false, roles:'Tous',
+            desc:'Detail d\'un media.',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "title": "...", "type": "PHOTO", "url": "https://...", ... } }' },
+          { method:'POST', path:'/media', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Publier un media. Les medias des PASTEUR sont en attente d\'approbation (isApproved=false). Ceux des ADMIN/APOTRE sont approuves directement.',
+            howto:'L\'URL du media doit etre fournie (stockage externe).',
+            body:'{ "title": "Photo culte", "description": "Moment de louange", "type": "PHOTO", "url": "https://storage.cloud.com/photo.jpg", "thumbnailUrl": "https://...", "fileSize": 1024000, "mimeType": "image/jpeg" }',
+            res:'{ "success": true, "data": { "media": {...} } }' },
+          { method:'PUT', path:'/media/approve/:id', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Approuver un media en attente.',
+            howto:'Seul ADMIN ou APOTRE peut approuver.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "media": {...} } }' },
+          { method:'PUT', path:'/media/:id', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Modifier un media (titre, description, etc.).',
+            howto:'Seuls ADMIN/APOTRE peuvent modifier.',
+            body:'{ "title": "Nouveau titre", "description": "..." }',
+            res:'{ "success": true, "data": { "media": {...} } }' },
+          { method:'DELETE', path:'/media/:id', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Supprimer definitivement un media.',
+            howto:'Seuls ADMIN/APOTRE peuvent supprimer.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Media supprime" }' },
+          { method:'PATCH', path:'/media/:id/visibility', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Masquer ou afficher un media (isHidden).',
+            howto:'Body: { "isHidden": true/false }',
+            body:'{ "isHidden": true }',
+            res:'{ "success": true, "data": { "media": {...} } }' },
+        ]
+      },
+      {
+        name: '📢 Programmes',
+        subtitle: 'Programmes annuels, mensuels, hebdomadaires, quotidien et verset du jour',
+        endpoints: [
+          { method:'GET', path:'/programs', auth:false, roles:'Tous',
+            desc:'Liste des programmes actifs.',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/programs/daily-verse', auth:false, roles:'Tous',
+            desc:'Verset du jour (tire du programme JOURNALIER le plus recent).',
+            howto:'Public. Utile pour afficher le verset quotidien.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "title": "Verset du jour", "content": "...", "bibleVerse": "Jean 3:16", ... } }' },
+          { method:'GET', path:'/programs/:id', auth:false, roles:'Tous',
+            desc:'Detail d\'un programme.',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": {...} }' },
+          { method:'POST', path:'/programs', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Creer un programme (ANNUEL, MENSUEL, HEBDOMADAIRE, JOURNALIER).',
+            howto:'Les programmes peuvent contenir un verset biblique.',
+            body:'{ "title": "Retraite 2025", "description": "...", "type": "ANNUEL", "startDate": "2025-01-01T00:00:00Z", "endDate": "2025-12-31T00:00:00Z", "location": "Lome", "bibleVerse": "Jeremie 29:11" }',
+            res:'{ "success": true, "data": { "program": {...} } }' },
+          { method:'PUT', path:'/programs/:id', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Modifier un programme.',
+            howto:'Seuls les champs fournis sont mis a jour.',
+            body:'{ "title": "Nouveau titre" }',
+            res:'{ "success": true, "data": { "program": {...} } }' },
+          { method:'DELETE', path:'/programs/:id', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Supprimer un programme.',
+            howto:'Supprime le programme.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Programme supprime" }' },
+        ]
+      },
+      {
+        name: '📅 Evenements',
+        subtitle: 'Gestion des evenements, inscriptions, recus',
+        endpoints: [
+          { method:'GET', path:'/events', auth:false, roles:'Tous',
+            desc:'Liste des evenements publics.',
+            howto:'Public. Optionnel: ?page=1&limit=20&type=CULTE&status=PLANIFIE',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/events/:id', auth:false, roles:'Tous',
+            desc:'Detail d\'un evenement.',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": {...} }' },
+          { method:'POST', path:'/events', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Creer un evenement (culte, conference, reunion, etc.).',
+            howto:'Une notification est envoyee a tous les utilisateurs.',
+            body:'{ "title": "Culte Dimanche", "description": "Culte de louange", "date": "2025-01-15T09:00:00Z", "startTime": "09:00", "endTime": "12:00", "location": "Eglise Centre", "address": "Lome", "maxCapacity": 200, "type": "CULTE", "isPublic": true, "churchId": "..." }',
+            res:'{ "success": true, "data": { "event": {...} } }' },
+          { method:'PUT', path:'/events/:id', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Modifier un evenement.',
+            howto:'Seuls les champs fournis sont mis a jour.',
+            body:'{ "title": "Nouveau titre", "date": "..." }',
+            res:'{ "success": true, "data": { "event": {...} } }' },
+          { method:'DELETE', path:'/events/:id', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Supprimer un evenement.',
+            howto:'Supprime l\'evenement.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Evenement supprime" }' },
+          { method:'POST', path:'/events/:eventId/register', auth:true, roles:'Tous',
+            desc:'S\'inscrire a un evenement.',
+            howto:'L\'inscription cree une entree avec statut EN_ATTENTE. Un recu peut etre genere apres validation.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "registration": {...} } }' },
+          { method:'GET', path:'/registrations/me', auth:true, roles:'Tous',
+            desc:'Lister mes inscriptions aux evenements.',
+            howto:'Retourne toutes les inscriptions de l\'utilisateur connecte.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/registrations/:id/receipt', auth:true, roles:'Tous',
+            desc:'Obtenir le recu d\'une inscription (format JSON avec les infos de l\'eglise).',
+            howto:'Le recu contient le numero de recu, l\'evenement, l\'eglise, le participant.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "receiptNumber": "REC-2025-001", "event": {...}, "church": {...}, "participant": {...} } }' },
+          { method:'PUT', path:'/registrations/:id/validate', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Valider une inscription (genere un numero de recu).',
+            howto:'Reserve aux responsables.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "registration": {...}, "receiptNumber": "REC-..." } }' },
+          { method:'GET', path:'/events/:id/registrations', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Liste des inscrits a un evenement.',
+            howto:'Reserve aux responsables.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'DELETE', path:'/registrations/:id', auth:true, roles:'Tous',
+            desc:'Annuler une inscription.',
+            howto:'L\'utilisateur peut annuler sa propre inscription.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Inscription annulee" }' },
+        ]
+      },
+      {
+        name: '📝 Publications (Posts)',
+        subtitle: 'Articles, blogs, annonces avec suivi des lectures',
+        endpoints: [
+          { method:'GET', path:'/posts', auth:false, roles:'Tous',
+            desc:'Liste des publications publiees.',
+            howto:'Public. Optionnel: ?page=1&limit=10&categoryId=...',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/posts/:id', auth:false, roles:'Tous',
+            desc:'Detail d\'une publication.',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": {...} }' },
+          { method:'POST', path:'/posts', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Creer une publication.',
+            howto:'Le champ categoryId est requis.',
+            body:'{ "title": "Titre", "content": "Contenu...", "excerpt": "Resume", "imageUrl": "https://...", "categoryId": "..." }',
+            res:'{ "success": true, "data": { "post": {...} } }' },
+          { method:'PUT', path:'/posts/:id', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Modifier une publication.',
+            howto:'Seuls les champs fournis sont mis a jour.',
+            body:'{ "title": "Nouveau titre", "content": "..." }',
+            res:'{ "success": true, "data": { "post": {...} } }' },
+          { method:'DELETE', path:'/posts/:id', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Supprimer une publication.',
+            howto:'Supprime la publication.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Publication supprimee" }' },
+          { method:'POST', path:'/posts/:id/read', auth:true, roles:'Tous',
+            desc:'Marquer une publication comme lue (tracking de lecture).',
+            howto:'Chaque utilisateur ne peut marquer qu\'une fois.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Post marque comme lu" }' },
+          { method:'GET', path:'/posts/:id/readers', auth:true, roles:'ADMIN, APOTRE, PASTEUR',
+            desc:'Liste des lecteurs d\'une publication.',
+            howto:'Reserve aux responsables.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+        ]
+      },
+      {
+        name: '🙏 Prieres Matinales',
+        subtitle: 'Priere quotidienne avec notification automatique a tous les utilisateurs',
+        endpoints: [
+          { method:'GET', path:'/prieres-matinales', auth:false, roles:'Tous',
+            desc:'Liste des prieres matinales.',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/prieres-matinales/:id', auth:false, roles:'Tous',
+            desc:'Detail d\'une priere matinale.',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": {...} }' },
+          { method:'POST', path:'/prieres-matinales', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Creer une priere matinale. Une notification temps reel + email est envoyee a TOUS les utilisateurs actifs.',
+            howto:'L\'email contient un lien vers la priere.',
+            body:'{ "title": "Priere du 15 Janvier", "content": "Seigneur, nous te louons...", "bibleVerse": "Psaume 1:1-3", "imageUrl": "https://..." }',
+            res:'{ "success": true, "data": { "morningPrayer": {...} } }' },
+        ]
+      },
+      {
+        name: '📺 Live Stream',
+        subtitle: 'Diffusions en direct YouTube ou interne, synchronisation YouTube',
+        endpoints: [
+          { method:'GET', path:'/live', auth:false, roles:'Tous',
+            desc:'Liste des diffusions en direct (passees et a venir).',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/live/current', auth:false, roles:'Tous',
+            desc:'Diffusion en cours (statut EN_DIRECT).',
+            howto:'Public. Affiche le live du moment.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "live": {...} } }' },
+          { method:'GET', path:'/live/:id', auth:false, roles:'Tous',
+            desc:'Detail d\'une diffusion.',
+            howto:'Public.',
+            body:'Aucun',
+            res:'{ "success": true, "data": {...} }' },
+          { method:'POST', path:'/live', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Creer une diffusion (YOUTUBE ou INTERNE).',
+            howto:'Si type=YOUTUBE, fournir youtubeVideoId. Si type=INTERNE, fournir streamUrl. Quand le statut passe a EN_DIRECT, une notification est envoyee a tous.',
+            body:'{ "title": "Culte en direct", "description": "...", "type": "YOUTUBE", "youtubeVideoId": "abc123", "youtubeChannelId": "UC...", "scheduledAt": "2025-01-15T10:00:00Z" }',
+            res:'{ "success": true, "data": { "live": {...} } }' },
+          { method:'PUT', path:'/live/:id', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Modifier une diffusion (titre, description, statut, etc.).',
+            howto:'Quand le statut passe a EN_DIRECT, une notification est envoyee automatiquement.',
+            body:'{ "status": "EN_DIRECT", "startedAt": "..." }',
+            res:'{ "success": true, "data": { "live": {...} } }' },
+          { method:'DELETE', path:'/live/:id', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Supprimer une diffusion.',
+            howto:'Supprime la diffusion.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Live supprime" }' },
+          { method:'GET', path:'/live/sync/youtube', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Synchroniser les diffusions depuis YouTube (importe les lives a venir et passes).',
+            howto:'Utilise l\'API YouTube pour recuperer les videos de la chaine configuree.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Synchronisation terminee", "data": { "imported": 3 } }' },
+          { method:'GET', path:'/live/youtube/:videoId', auth:false, roles:'Tous',
+            desc:'Obtenir les informations d\'une video YouTube (titre, duree, vignette).',
+            howto:'Public. Utilise l\'API YouTube.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "title": "...", "duration": "PT1H30M", "thumbnail": "..." } }' },
+        ]
+      },
+      {
+        name: '💰 Dons',
+        subtitle: 'Dons et offrandes par FLOOZ, TMONEY, PAYPAL, CARTE',
+        endpoints: [
+          { method:'POST', path:'/donations', auth:true, roles:'Tous',
+            desc:'Faire un don. Supporte FLOOZ, TMONEY, PAYPAL, CARTE.',
+            howto:'Le don peut etre lie a une eglise (churchId) ou a un evenement (eventId). Le statut initial est EN_ATTENTE.',
+            body:'{ "amount": 5000, "currency": "XAF", "type": "OFFRANDE", "description": "Offrande du dimanche", "paymentMethod": "FLOOZ", "phone": "+22800000000", "churchId": "...", "eventId": "..." }',
+            res:'{ "success": true, "data": { "donation": {...} } }' },
+          { method:'GET', path:'/donations/me', auth:true, roles:'Tous',
+            desc:'Lister mes dons.',
+            howto:'Retourne uniquement les dons de l\'utilisateur connecte.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'GET', path:'/donations', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Lister tous les dons (avec filtres).',
+            howto:'Optionnel: ?status=CONFIRME&paymentMethod=FLOOZ&churchId=...',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'PUT', path:'/donations/:id/confirm', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Confirmer un don (passe le statut de EN_ATTENTE a CONFIRME).',
+            howto:'Reserve aux administrateurs.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "donation": {...} } }' },
+        ]
+      },
+      {
+        name: '📞 Contact',
+        subtitle: 'Formulaire de contact public, messagerie interne',
+        endpoints: [
+          { method:'POST', path:'/contact', auth:false, roles:'Tous',
+            desc:'Envoyer un message de contact (public).',
+            howto:'Le message est envoye par email a l\'APOTRE ou a un PASTEUR specifique (recipientId).',
+            body:'{ "name": "Jean Marc", "email": "jean@example.com", "subject": "Question", "message": "Bonjour, j\'aimerais...", "recipientType": "APOTRE", "recipientId": null }',
+            res:'{ "success": true, "data": { "contact": {...} } }' },
+          { method:'GET', path:'/contact', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Lister les messages de contact.',
+            howto:'Optionnel: ?isRead=false',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+          { method:'PUT', path:'/contact/:id/read', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Marquer un message de contact comme lu.',
+            howto:'Reserve aux administrateurs.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "contact": {...} } }' },
+          { method:'DELETE', path:'/contact/:id', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Supprimer un message de contact.',
+            howto:'Supprime le message.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Message supprime" }' },
+        ]
+      },
+      {
+        name: '📢 Notifications',
+        subtitle: 'Notifications temps reel, marquage lu, gestion',
+        endpoints: [
+          { method:'GET', path:'/notifications', auth:true, roles:'Tous',
+            desc:'Lister ses notifications.',
+            howto:'Optionnel: ?unreadOnly=true&page=1&limit=20',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "notifications": [...], "total": 15, "unreadCount": 3 } }' },
+          { method:'PUT', path:'/notifications/read-all', auth:true, roles:'Tous',
+            desc:'Marquer toutes les notifications comme lues.',
+            howto:'Passe isRead a true pour toutes les notifications de l\'utilisateur.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Toutes les notifications ont ete marquees comme lues" }' },
+          { method:'PUT', path:'/notifications/:id/read', auth:true, roles:'Tous',
+            desc:'Marquer une notification comme lue.',
+            howto:'Passe isRead a true pour la notification specifiee.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "notification": {...} } }' },
+          { method:'DELETE', path:'/notifications/:id', auth:true, roles:'Tous',
+            desc:'Supprimer une notification.',
+            howto:'Supprime la notification.',
+            body:'Aucun',
+            res:'{ "success": true, "message": "Notification supprimee" }' },
+        ]
+      },
+      {
+        name: '📊 Statistiques',
+        subtitle: 'Dashboard, analytics, tracking de pages',
+        endpoints: [
+          { method:'GET', path:'/stats/dashboard', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Dashboard complet : utilisateurs, evenements, dons (par methode), trafic, contenu, abonnements, contacts, live.',
+            howto:'Reserve ADMIN/APOTRE. Retourne un resume complet.',
+            body:'Aucun',
+            res:'{ "success": true, "data": { "totalUsers": 150, "totalEvents": 12, "totalDonations": 500000, "donationsByMethod": {...}, "totalPageViews": 3000, "totalPosts": 45, "totalSubscriptions": 80, "totalContacts": 10, "activeLivestreams": 1 } }' },
+          { method:'GET', path:'/stats', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Statistiques generales.',
+            howto:'Similaire au dashboard mais moins detaille.',
+            body:'Aucun',
+            res:'{ "success": true, "data": {...} }' },
+          { method:'GET', path:'/stats/churches/:churchId', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Statistiques par eglise.',
+            howto:'Retourne les stats pour une eglise specifique.',
+            body:'Aucun',
+            res:'{ "success": true, "data": {...} }' },
+          { method:'POST', path:'/stats/track', auth:false, roles:'Tous',
+            desc:'Tracker une page vue (public). Appele par le frontend a chaque changement de page.',
+            howto:'Envoyer la page visitee. L\'ip et userAgent sont captures automatiquement.',
+            body:'{ "page": "/accueil", "referrer": "https://google.com" }',
+            res:'{ "success": true, "message": "Page view tracked" }' },
+        ]
+      },
+      {
+        name: '📧 Newsletter / Abonnements',
+        subtitle: 'Inscription/desabonnement newsletter (public)',
+        endpoints: [
+          { method:'POST', path:'/subscriptions', auth:false, roles:'Tous',
+            desc:'S\'abonner a la newsletter (public, sans authentification).',
+            howto:'L\'email est enregistre et marque comme actif.',
+            body:'{ "email": "user@example.com", "name": "Jean" }',
+            res:'{ "success": true, "data": { "subscription": {...} } }' },
+          { method:'POST', path:'/subscriptions/unsubscribe', auth:false, roles:'Tous',
+            desc:'Se desabonner de la newsletter.',
+            howto:'Marque isActive a false.',
+            body:'{ "email": "user@example.com" }',
+            res:'{ "success": true, "message": "Desabonne avec succes" }' },
+          { method:'GET', path:'/subscriptions', auth:true, roles:'ADMIN, APOTRE',
+            desc:'Lister les abonnes a la newsletter.',
+            howto:'Reserve ADMIN/APOTRE.',
+            body:'Aucun',
+            res:'{ "success": true, "data": [...] }' },
+        ]
+      },
     ];
 
-    function renderEndpoints(filter) {
-      const el = document.getElementById('endpointList');
-      el.innerHTML = '';
-      const filtered = filter ? endpoints.filter(e => e.path.toLowerCase().includes(filter) || e.desc.toLowerCase().includes(filter)) : endpoints;
-      filtered.forEach(ep => {
-        const div = document.createElement('div');
-        div.className = 'endpoint-item';
-        div.innerHTML = `
-          <span class="badge badge-${ep.method.toLowerCase()}">${ep.method}</span>
-          <span class="path">${ep.path}</span>
-          ${ep.auth ? '<span class="badge badge-auth">🔒</span>' : '<span class="badge badge-pub">🌐</span>'}
-          <span class="desc">${ep.desc}</span>
-        `;
-        div.onclick = () => openConsole(ep.method, ep.path);
-        el.appendChild(div);
+    function buildDocs() {
+      const container = document.getElementById('docsContainer');
+      container.innerHTML = '';
+      apiGroups.forEach(group => {
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'api-group';
+        groupDiv.dataset.groupName = group.name;
+
+        let groupHtml = `<div class="api-group-title">${group.name} <span class="api-group-subtitle">— ${group.subtitle}</span></div>`;
+
+        group.endpoints.forEach(ep => {
+          const methodLower = ep.method.toLowerCase();
+          groupHtml += `
+            <div class="endpoint-card" data-search="${ep.method} ${ep.path} ${ep.desc} ${ep.roles}">
+              <div class="endpoint-header" onclick="toggleDoc(this)">
+                <span class="method"><span class="badge badge-${methodLower}">${ep.method}</span></span>
+                <span class="path">${ep.path}</span>
+                <span class="role">${ep.auth ? '<span class="badge badge-auth">🔒 ' + ep.roles + '</span>' : '🌐 Public'}</span>
+              </div>
+              <div class="endpoint-doc">
+                <div class="doc-section">
+                  <strong>Description</strong>
+                  <p>${ep.desc}</p>
+                </div>
+                <div class="doc-section">
+                  <strong>Comment utiliser ?</strong>
+                  <p>${ep.howto}</p>
+                </div>
+                ${ep.body && ep.body !== 'Aucun' ? `
+                <div class="doc-section">
+                  <strong>Body (requete)</strong>
+                  <pre>${ep.body}</pre>
+                </div>` : ''}
+                <div class="doc-section">
+                  <strong>Reponse (exemple)</strong>
+                  <pre>${ep.res}</pre>
+                </div>
+                <button class="btn-primary btn-sm try-btn" onclick="tryEndpoint('${ep.method}','${ep.path}')">🛠 Tester cet endpoint</button>
+              </div>
+            </div>`;
+        });
+
+        groupDiv.innerHTML = groupHtml;
+        container.appendChild(groupDiv);
       });
     }
 
-    function filterEndpoints() {
-      renderEndpoints(document.getElementById('endpointSearch').value.toLowerCase());
+    function toggleDoc(header) {
+      const doc = header.nextElementSibling;
+      doc.classList.toggle('open');
     }
 
-    // ===================== CONSOLE =====================
-    function openConsole(method, path) {
+    function filterDocs() {
+      const q = document.getElementById('docSearch').value.toLowerCase();
+      document.querySelectorAll('.endpoint-card').forEach(card => {
+        const text = card.dataset.search.toLowerCase();
+        card.style.display = text.includes(q) ? '' : 'none';
+      });
+      document.querySelectorAll('.api-group').forEach(group => {
+        const visible = Array.from(group.querySelectorAll('.endpoint-card')).some(c => c.style.display !== 'none');
+        group.style.display = visible ? '' : 'none';
+      });
+    }
+
+    function tryEndpoint(method, path) {
       switchTab('console');
       document.getElementById('consoleMethod').value = method;
       document.getElementById('consoleEndpoint').value = path;
@@ -461,6 +929,7 @@
       document.getElementById('consoleResponse').style.display = 'none';
     }
 
+    // ===================== CONSOLE =====================
     async function sendRequest() {
       const method = document.getElementById('consoleMethod').value;
       let path = document.getElementById('consoleEndpoint').value;
@@ -469,11 +938,10 @@
       el.style.display = 'block';
       el.className = 'response';
       el.textContent = '⏳ Chargement...';
-
       if (!path.startsWith('/')) path = '/' + path;
       const url = `${getBase()}${path}`;
       const opts = { method, headers: headers(true) };
-      if (bodyRaw && ['POST', 'PUT', 'PATCH'].includes(method)) {
+      if (bodyRaw && ['POST','PUT','PATCH'].includes(method)) {
         try { opts.body = JSON.stringify(JSON.parse(bodyRaw)); }
         catch (e) { el.textContent = '❌ Body JSON invalide'; return; }
       }
@@ -489,7 +957,7 @@
     }
 
     // ===================== INIT =====================
-    renderEndpoints();
+    buildDocs();
     if (getToken()) loadUserInfo();
   </script>
 </body>
