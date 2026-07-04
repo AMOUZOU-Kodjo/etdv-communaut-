@@ -12,8 +12,7 @@ initSocket(server);
 
 const startServer = async () => {
   try {
-    const { PrismaClient } = require("@prisma/client");
-    const prisma = new PrismaClient();
+    const prisma = require("./src/config/database");
     await prisma.$connect();
     console.log("Connexion a la base de donnees reussie");
     await prisma.$disconnect();
