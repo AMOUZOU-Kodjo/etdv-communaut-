@@ -1,10 +1,12 @@
 const { PrismaClient } = require("@prisma/client");
 const { PrismaPg } = require("@prisma/adapter-pg");
+const { Pool } = require("pg");
 
 // Configuration de la connexion a PostgreSQL via Prisma
 const connectionString = process.env.DATABASE_URL;
 
-const adapter = new PrismaPg({ connectionString });
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
 
 const prisma = new PrismaClient({
   adapter,
