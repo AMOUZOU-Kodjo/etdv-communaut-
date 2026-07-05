@@ -88,7 +88,7 @@ const verifyOtp = async (req, res, next) => {
 // Creation d'un nouveau compte utilisateur
 const register = async (req, res, next) => {
   try {
-    const { email, password, firstName, lastName, phone, churchId } = req.body;
+    const { email, password, firstName, lastName, phone, churchId, role } = req.body;
 
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
@@ -104,6 +104,7 @@ const register = async (req, res, next) => {
         firstName,
         lastName,
         phone,
+        ...(role && { role }),
         ...(churchId && { churchId }),
       },
       select: {
