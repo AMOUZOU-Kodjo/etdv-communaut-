@@ -118,10 +118,26 @@ const register = async (req, res, next) => {
       },
     });
 
+    const accessToken = generateAccessToken(user.id, user.role);
+    const refreshToken = generateRefreshToken(user.id, user.role);
+
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken: hashedRefreshToken },
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     res.status(201).json({
       success: true,
       message: "Compte cree avec succes",
-      data: user,
+      data: { accessToken, user },
     });
   } catch (error) {
     next(error);
